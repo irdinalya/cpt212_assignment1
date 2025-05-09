@@ -1,19 +1,21 @@
 import java.util.*;
 
-public class RadixSortTwoArrays {
+public class RadixSort {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Get user input
+        // Get number of elements from user
         System.out.print("Enter number of elements: ");
         int n = scanner.nextInt();
 
+        // Read the numbers into integer array
         int[] inputArray = new int[n];
         System.out.println("Enter the numbers:");
         for (int i = 0; i < n; i++) {
             inputArray[i] = scanner.nextInt();
         }
 
+        //Determine the max num of digits
         int maxDigits = getMaxDigits(inputArray);
 
         // Pad numbers with zeros and convert to string array
@@ -22,11 +24,12 @@ public class RadixSortTwoArrays {
             workingArray[i] = String.format("%0" + maxDigits + "d", inputArray[i]);
         }
 
-        // Two bucket arrays: only one active per pass
+        // Bucket arrays for alternating sorting passes
         String[][] bucketA = new String[10][n];
         String[][] bucketB = new String[10][n];
-        boolean useA = true;
+        boolean useA = true; //Track bucket to use for current pass
 
+        //Radix sort from LSD
         for (int digitIndex = maxDigits - 1; digitIndex >= 0; digitIndex--) {
             // Clear buckets
             for (int i = 0; i < 10; i++) {
@@ -62,7 +65,7 @@ public class RadixSortTwoArrays {
 
             useA = !useA; // Swap buckets for next round
 
-            // Show state after this pass
+            // Show result after each pass
             System.out.println("After pass " + (maxDigits - digitIndex) + ": " + Arrays.toString(workingArray));
         }
 
