@@ -4,28 +4,30 @@ class RadixSortWordsLSD {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Input words
+        // Input number of words from user
         System.out.print("Enter number of words: ");
         int n = scanner.nextInt();
-        scanner.nextLine(); // consume newline
+        scanner.nextLine(); // Consume the leftover newline character
 
-        String[] inputArray = new String[n];
+        String[] inputArray = new String[n]; // Stores original input words
+        int maxLen = 0; // Will store the length of the longest word
+
+        // Input words and determine the maximum length
         System.out.println("Enter the words:");
-        int maxLen = 0;
         for (int i = 0; i < n; i++) {
-            inputArray[i] = scanner.nextLine().toLowerCase();
+            inputArray[i] = scanner.nextLine().toLowerCase(); // // Convert to lowercase
             if (inputArray[i].length() > maxLen) {
-                maxLen = inputArray[i].length();
+                maxLen = inputArray[i].length(); // Update max length if needed
             }
         }
 
-        // Pad with '{' to make all same length
+        // Pad shorter words with spaces to match with length of the longest word
         String[] workingArray = new String[n];
         for (int i = 0; i < n; i++) {
-            workingArray[i] = String.format("%-" + maxLen + "s", inputArray[i]).replace(' ', '{');
+            workingArray[i] = String.format("%-" + maxLen + "s", inputArray[i]); // padding with space
         }
 
-        // Buckets: 0-25 for a-z, 26 for '{'
+        // Initialize two 2D arrays (buckets) for characters: a-z (1-26), space (0)
         String[][] bucketA = new String[27][n];
         String[][] bucketB = new String[27][n];
         boolean useA = true;
@@ -37,10 +39,10 @@ class RadixSortWordsLSD {
                 Arrays.fill(bucketB[i], null);
             }
 
-            // Distribute to bucket
+            // Distribute to buckets
             for (String s : workingArray) {
                 char c = s.charAt(digitIndex);
-                int bucketIndex = (c == '{') ? 26 : (c - 'a');
+                int bucketIndex = (c == ' ') ? 0 : (c - 'a' + 1); // space = 0, a = 1, ..., z = 26
                 String[][] currentBucket = useA ? bucketA : bucketB;
 
                 for (int i = 0; i < n; i++) {
@@ -51,7 +53,7 @@ class RadixSortWordsLSD {
                 }
             }
 
-            // Collect from bucket
+            // Collect from buckets
             int index = 0;
             String[][] currentBucket = useA ? bucketA : bucketB;
             for (int i = 0; i < 27; i++) {
@@ -62,13 +64,13 @@ class RadixSortWordsLSD {
                 }
             }
 
-            useA = !useA; // Swap bucket
+            useA = !useA; // Alternate between bucketA and bucketB
             System.out.println("After pass " + (maxLen - digitIndex) + ": " + Arrays.toString(workingArray));
         }
 
-        // Remove padding before printing result
+        // Trim trailing spaces before printing final result
         for (int i = 0; i < n; i++) {
-            workingArray[i] = workingArray[i].replaceAll("\\{+$", ""); // remove trailing '{'
+            workingArray[i] = workingArray[i].trim();
         }
 
         System.out.println("Sorted result: " + Arrays.toString(workingArray));
