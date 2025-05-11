@@ -27,7 +27,7 @@ public class RadixSort {
         String[] workingArray = new String[n];
         for (int i = 0; i < n; i++) {
             workingArray[i] = String.format("%0" + maxDigits + "d", inputArray[i]);
-            primitveOps+=4; // loop, format, assign and access array operation
+            primitiveOps+=4; // loop, format, assign and access array operation
         }
 
         // Bucket arrays for alternating sorting passes
@@ -42,7 +42,7 @@ public class RadixSort {
             for (int i = 0; i < 10; i++) {
                 Arrays.fill(bucketA[i], null);
                 Arrays.fill(bucketB[i], null);
-                primitive+=2; // loop and fill operation
+                primitiveOps+=2; // loop and fill operation
             }
 
             // Put into current bucket
@@ -107,7 +107,7 @@ public class RadixSort {
         }
 
         primitiveOpsLocal+=2; // conversion
-        primitiveOps+=primitiveOpsLocal // update total
+        primitiveOps+=primitiveOpsLocal; // update total
 
         System.out.println("Primitve Operations:" + primitiveOps);
         return Integer.toString(max).length();
